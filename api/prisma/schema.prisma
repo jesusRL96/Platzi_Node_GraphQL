@@ -15,6 +15,7 @@ model Avocado {
   createdAt DateTime  @default(now())
   updatedAt DateTime? @updatedAt
   deletedAt DateTime?
+
   name       String
   sku        String      @unique
   price      Float
@@ -29,5 +30,5 @@ model Attributes {
   hardiness   String?
   taste       String?
   avocado     Avocado @relation(fields: [avocadoId], references: [id])
-  avocadoId   Int @unique
+  avocadoId   Int
 }

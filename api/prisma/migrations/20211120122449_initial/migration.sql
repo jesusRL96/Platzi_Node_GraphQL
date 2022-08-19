@@ -25,4 +25,4 @@ CREATE TABLE "Attributes" (
 CREATE UNIQUE INDEX "Avocado_sku_key" ON "Avocado"("sku");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "Attributes_avocadoId_key" ON "Attributes"("avocadoId");
+CREATE UNIQUE INDEX "Attributes_avocadoId_unique" ON "Attributes"("avocadoId");
