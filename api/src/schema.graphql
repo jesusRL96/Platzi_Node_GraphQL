@@ -1,7 +1,7 @@
 scalar DateTime
 
 type Query {
-  avos(skip: Int, take:Int, where: AvoWhereInput): [Avocado]!
+  avos(skip: Int, take: Int, where: AvoWhereInput): [Avocado]!
   avo(id: ID!): Avocado
 }
 
@@ -39,6 +39,7 @@ type Avocado implements BaseModel {
 input AvoCreateInput {
   name: String!
   price: Float!
+  sku: String!
   image: String!
   description: String
   shape: String

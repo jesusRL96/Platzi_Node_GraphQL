@@ -1,4 +1,3 @@
-import { createHash } from 'crypto'
 import type { PrismaClient, Avocado, Attributes, Prisma } from '@prisma/client'
 
 type ResolverParent = unknown
@@ -6,10 +5,15 @@ type ResolverContext = { orm: PrismaClient }
 
 export async function findAll(
   parent: ResolverParent,
-  args: { skip?: number, take?: number, where?: Prisma.AvocadoWhereInput },
+  args: { where?: Prisma.AvocadoWhereInput; skip?: number; take?: number },
   context: ResolverContext
 ): Promise<Avocado[]> {
-  return context.orm.avocado.findMany({ include: { attributes: true }, skip: args.skip, take: args.take, where: args.where })
+  return context.orm.avocado.findMany({
+    include: { attributes: true },
+    where: args.where,
+    skip: args.skip,
+    take: args.take,
+  })
 }
 
 export async function findOne(
@@ -18,15 +22,14 @@ export async function findOne(
   context: ResolverContext
 ): Promise<Avocado | null> {
   return context.orm.avocado.findUnique({
-    where: { id: parseInt(args.id, 10)},
+    where: {
+      id: parseInt(args.id, 10),
+    },
     include: {
       attributes: true,
     },
   })
 }
-
-type AvocadoInput = Pick<Avocado, 'name' | 'price' | 'image'> &
-  Omit<Attributes, 'id'>
 
 export const resolver: Record<
   keyof (Avocado & { attributes: Attributes }),
@@ -53,17 +56,12 @@ export async function createAvo(
   {
     data,
   }: {
-    data: AvocadoInput
+    data: Pick<Avocado, 'name' | 'price' | 'image' | 'sku'> &
+      Omit<Attributes, 'id'>
   },
   { orm }: { orm: PrismaClient }
 ): Promise<Avocado> {
-  const { name, image, price, ...attributes } = data
-
-  const sku = createHash('sha256')
-    .update(`${name}-${price}`, 'utf8')
-    .digest('base64')
-    .slice(-6)
-
+  const { name, image, price, sku, ...attributes } = data
   const avo = await orm.avocado.create({
     data: {
       name,
