@@ -17,13 +17,7 @@ const orm = new PrismaClient()
   const server = new ApolloServer({
     typeDefs,
     resolvers,
-    context: ({ req }) => {
-      console.log('req user: ', req.user)
-      if ( req.user === undefined) {
-        throw new Error('user is undefined')
-      }
-      return { orm, user: req.user }
-    },
+    context: ({ req }) => ({ orm, user: req.user }),
     plugins: [ApolloServerPluginDrainHttpServer({ httpServer })],
   })
 
