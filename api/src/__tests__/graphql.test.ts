@@ -47,33 +47,25 @@ const mockAvocadoDB: Avocado[] = [
 
 test('should return a list of avos', async () => {
   mockContext.orm.avocado.findMany.mockResolvedValue(mockAvocadoDB)
-
   const query = gql`
-    {
-      avos {
-        id
-        name
-        price
-      }
+  {
+    avos {
+      id
+      name
+      price
     }
+  }
   `
-
-  const result = await tester.graphql(query, undefined, context)
-  expect(mockContext.orm.avocado.findMany).toHaveBeenCalledTimes(1)
+  const result = await tester.graphql(query, undefined, context);
+  console.log(result);
   expect(result.data).toEqual({
     avos: [
       {
-        id: '1',
+        id: "1",
         name: 'Reed Avocado',
         price: 1.18,
-      },
-    ],
-  })
-  expect(mockContext.orm.avocado.findMany).toHaveBeenCalledWith({
-    include: { attributes: true },
-    where: undefined,
-    take: undefined,
-    skip: undefined,
+      }
+    ]
   })
 })
 
